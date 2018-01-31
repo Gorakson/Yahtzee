@@ -1,0 +1,9 @@
+package edu.hm.cs.kniffel.model.full;
+
+import edu.hm.cs.kniffel.model.ReadonlyDice;
+
+public interface RollableDice extends ReadonlyDice {
+
+	void roll();
+
+}

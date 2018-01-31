@@ -1,0 +1,7 @@
+package edu.hm.cs.kniffel.command;
+
+public interface ReadonlyCommand {
+
+	CommandResult test();
+
+}

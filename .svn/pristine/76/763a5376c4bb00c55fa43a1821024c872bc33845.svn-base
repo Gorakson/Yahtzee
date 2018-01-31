@@ -1,0 +1,7 @@
+package edu.hm.cs.kniffel.model;
+
+public interface ReadonlyDice {
+
+	int getValue();
+
+}

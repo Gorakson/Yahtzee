@@ -1,0 +1,22 @@
+package edu.hm.cs.kniffel.controller.rules;
+
+import edu.hm.cs.kniffel.model.full.WriteableDiceCup;
+import edu.hm.cs.kniffel.model.full.WriteablePlayer;
+
+public abstract class BaseRule implements Rule {
+	private final WriteablePlayer player;
+	private final WriteableDiceCup diceCup;
+	
+	public BaseRule(WriteablePlayer player, WriteableDiceCup diceCup) {
+		this.player = player;
+		this.diceCup = diceCup;
+	}
+	
+	WriteablePlayer getPlayer() {
+		return player;
+	}
+	
+	WriteableDiceCup getDiceCup() {
+		return diceCup;
+	}
+}

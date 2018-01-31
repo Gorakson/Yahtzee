@@ -1,0 +1,46 @@
+package edu.hm.cs.kniffel.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import edu.hm.cs.kniffel.command.full.Command;
+import edu.hm.cs.kniffel.model.Player;
+
+public class GameLogic {
+	private final List<Command> commands;
+	private List<Command> validCommands;
+	
+	public GameLogic(List<Command> commands) {
+		if (commands == null) {
+			throw new NullPointerException();
+		} else if (commands.size() == 0) {
+			throw new IllegalArgumentException();
+		}
+		
+		this.commands = commands;
+		validCommands = new ArrayList<>();
+	}
+	
+	public void execute(Command command, Player player) {
+		command.execute(player);
+		validCommands = getValidCommands(player);
+		
+		while (validCommands.size() == 1) {
+			validCommands.get(0).execute(player);
+			validCommands = getValidCommands(player);
+		}
+	}
+	
+	private List<Command> getValidCommands(Player player) {
+		final List<Command> result = commands.stream()
+										   .filter(command -> command.test(player).getResult())
+										   .collect(Collectors.toList());
+		
+		if (result.size() == 0) {
+			throw new IllegalStateException("No valid commands.");
+		}
+		
+		return result;
+	}
+}

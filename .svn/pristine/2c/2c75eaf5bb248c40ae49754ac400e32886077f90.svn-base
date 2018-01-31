@@ -1,0 +1,8 @@
+package edu.hm.cs.kniffel.controller.rules;
+
+import edu.hm.cs.kniffel.model.ReadonlyDiceCup;
+
+public interface Rule {
+	boolean check(ReadonlyDiceCup diceCup);
+	int numPoints(ReadonlyDiceCup diceCup);
+}

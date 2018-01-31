@@ -1,0 +1,64 @@
+package edu.hm.cs.kniffel.gui;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.Panel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.JPanel;
+
+import edu.hm.cs.kniffel.controller.GameLogic;
+import edu.hm.cs.kniffel.model.ReadonlyGame;
+import edu.hm.cs.kniffel.utilities.Updateable;
+
+/**
+ * panel to manage players in the game.
+ * 
+ * @author Hammerschall
+ * @version 1.0
+ */
+public class SwingPlayerPanel extends JPanel implements Updateable {
+
+    /** 
+     * serial number. 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * Initiates a new panel with players. Each player is set on an 
+     * additional panel.
+     * @param number of players in the game
+     * @param game object to control the game flow
+     */
+    public SwingPlayerPanel(GameLogic logic, ReadonlyGame game) {
+        
+        setLayout(new GridLayout(0, game.getNumPlayers(), 0, 0));
+        
+        // create players and player panels
+        for (int i = 0; i < game.getNumPlayers(); i++) {
+            JPanel panel = new JPanel();
+            panel.setLayout(new BorderLayout());
+            SwingPlayer player = new SwingPlayer(game, game.getPlayers().get(i), panel);
+
+            // mouse listener to react on button clicks.
+            player.addMouseListener(new MouseAdapter() {
+                public void mousePressed(MouseEvent me) {
+                    player.activate();
+                }
+            });
+
+            panel.add(player, BorderLayout.CENTER);
+            add(panel);
+        }
+    }
+
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

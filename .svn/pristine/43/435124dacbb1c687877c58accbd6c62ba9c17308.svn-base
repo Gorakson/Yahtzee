@@ -1,0 +1,23 @@
+package edu.hm.cs.kniffel.command.full;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import edu.hm.cs.kniffel.controller.rules.Rule;
+import edu.hm.cs.kniffel.model.full.WriteableGame;
+
+public class Commands {
+	private final List<Command> commands;
+	
+	public Commands(WriteableGame game, List<Rule> rules) {
+		commands = new ArrayList<>();
+		
+		rules.forEach(rule -> commands.add(new CommandWriteScore(game, rule)));
+		commands.add(new CommandTurnEnd(game));
+		commands.add(new CommandRollDiceCup(game));
+	}
+	
+	public List<Command> getCommands() {
+		return commands;
+	}
+}

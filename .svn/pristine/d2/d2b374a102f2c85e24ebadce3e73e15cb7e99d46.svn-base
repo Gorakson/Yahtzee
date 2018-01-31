@@ -1,0 +1,46 @@
+package edu.hm.cs.kniffel.controller.rules;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import edu.hm.cs.kniffel.model.ReadonlyDiceCup;
+import edu.hm.cs.kniffel.model.full.ReadwriteDiceCup;
+
+public class RuleSmallStraight implements Rule {
+
+	private static final int NUM_POINTS = 30;
+	private static final int MIN_STRAIGHT_SIZE = 4;
+
+	@Override
+	public boolean check(ReadonlyDiceCup diceCup) {
+		List<Integer> diceValues = new ArrayList<>(diceCup.getValues());
+		Collections.sort(diceValues);
+		
+		int straightSize = 1;
+		
+		for (int index = 1; index < diceValues.size() && straightSize < MIN_STRAIGHT_SIZE; index++) {
+			if (diceValues.get(index) - diceValues.get(index - 1) == 1) {
+				straightSize++;
+			} else {
+				straightSize = 1;
+			}
+		}
+		
+		return straightSize >= MIN_STRAIGHT_SIZE;
+	}
+
+	@Override
+	public int numPoints(ReadonlyDiceCup diceCup) {
+		final int result;
+		
+		if (check(diceCup)) {
+			result = NUM_POINTS;
+		} else {
+			result = 0;
+		}
+		
+		return result;
+	}
+
+}

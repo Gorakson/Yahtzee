@@ -1,0 +1,30 @@
+package edu.hm.cs.kniffel.model.full;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import edu.hm.cs.kniffel.model.Player;
+import edu.hm.cs.kniffel.utilities.Changeable;
+
+public class ScoreBoard {
+	private List<PlayerProtocol> playerProtocols;
+	
+	public ScoreBoard(Changeable owner, List<Player> players, List<String> upperSectionRules, List<String> lowerSectionRules) {
+		if (players == null || upperSectionRules == null || lowerSectionRules == null) {
+			throw new NullPointerException();
+		} else if (players.size() == 0 || upperSectionRules.size() + lowerSectionRules.size() == 0) {
+			throw new IllegalArgumentException();
+		}
+		
+		playerProtocols = players.stream().map(player -> new PlayerProtocol(owner, upperSectionRules))
+										  .collect(Collectors.toList());
+	}
+	
+	public int getNumPlayers() {
+		return playerProtocols.size();
+	}
+	
+	public int getNumRows() {
+		
+	}
+}

@@ -1,0 +1,15 @@
+package edu.hm.cs.kniffel.model;
+
+import java.util.List;
+import java.util.Observable;
+
+import edu.hm.cs.kniffel.model.full.ReadwriteDiceCup;
+
+public abstract class ReadonlyGame extends Observable {
+
+	public abstract Player getCurrentPlayer();
+	public abstract int getNumPlayers();
+	public abstract GameState getState();
+	public abstract ReadwriteDiceCup getDiceCup();
+	public abstract List<Player> getPlayers();
+}

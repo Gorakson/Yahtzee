@@ -1,0 +1,35 @@
+package edu.hm.cs.kniffel.model.full;
+
+public class Player implements WriteablePlayer {
+	private static int nextId = 0;
+	
+	private final int id;
+	private final String name;
+	private final PlayerProtocol playerProtocol;
+	
+	public Player(String name, PlayerProtocol playerProtocol) {
+		this.name = name;
+		id = nextId++;
+		this.playerProtocol = playerProtocol;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public int getId() {
+		return id;
+	}
+
+	@Override
+	public int getPoints(String ruleName) {
+		return playerProtocol.getPoints(ruleName);
+	}
+
+	@Override
+	public void setPoints(String ruleName, int points) {
+		playerProtocol.setPoints(ruleName, points);
+	}
+}

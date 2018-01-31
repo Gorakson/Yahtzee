@@ -1,0 +1,39 @@
+package edu.hm.cs.kniffel.command.full;
+
+import edu.hm.cs.kniffel.command.CommandResult;
+import edu.hm.cs.kniffel.model.GameState;
+import edu.hm.cs.kniffel.model.Player;
+import edu.hm.cs.kniffel.model.full.WriteableGame;
+
+public class CommandRollDiceCup extends BaseCommand {
+
+	private static final int MAX_ROLL_COUNT = 3;
+	
+	public CommandRollDiceCup(WriteableGame game) {
+		super(game);
+	}
+
+	@Override
+	public CommandResult execute(Player player) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public CommandResult test(Player player) {
+		final CommandResult result;
+		
+		if (getGame().getState() != GameState.Running) {
+			result = new CommandResult(false, "Game is not running.");
+		} else if (!getGame().getCurrentPlayer().equals(player)) {
+			result = new CommandResult(false, "Player with ID: " + player.getId() + " is not the current player.");
+		} else if (getGame().getDiceCup().getRollsCount() >= MAX_ROLL_COUNT) {
+			result = new CommandResult(false, "Player with ID: " + player.getId() + " has already rolled " + MAX_ROLL_COUNT + " times");
+		} else {
+			result = new CommandResult();
+		}
+		
+		return result;
+	}
+
+}

@@ -1,0 +1,17 @@
+package edu.hm.cs.kniffel.command.full;
+
+import edu.hm.cs.kniffel.model.Player;
+import edu.hm.cs.kniffel.model.full.WriteableGame;
+
+public abstract class BaseCommand implements Command {
+
+	private final WriteableGame game;
+	
+	public BaseCommand(WriteableGame game) {
+		this.game = game;
+	}
+	
+	WriteableGame getGame() {
+		return game;
+	}
+}

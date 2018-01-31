@@ -1,0 +1,34 @@
+package edu.hm.cs.kniffel.controller.rules;
+
+import edu.hm.cs.kniffel.model.full.WriteableDiceCup;
+import edu.hm.cs.kniffel.model.full.WriteablePlayer;
+
+public final class RuleYahtzee extends BaseRule {
+
+	private static final int MIN_COUNT = 5;
+	private static final int NUM_POINTS = 50;
+	
+	public RuleYahtzee(WriteablePlayer player, WriteableDiceCup diceCup) {
+		super(player, diceCup);
+	}
+	
+	@Override
+	public boolean check() {
+		
+		final int number = getDiceCup().getValues().get(0);
+		return getDiceCup().getValues().stream().filter(num -> num == number).count() >= MIN_COUNT;
+	}
+
+	@Override
+	public int numPoints() {
+		final int result;
+		
+		if (check()) {
+			result = NUM_POINTS;
+		} else {
+			result = 0;
+		}
+		
+		return result;
+	}
+}

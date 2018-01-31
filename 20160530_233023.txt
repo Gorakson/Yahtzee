@@ -1,0 +1,5 @@
+        1s	         2	
+        2s	         2	
+Sum Part 1	         4	
+Sum Part 2	         0	
+     Total	         4	

@@ -1,0 +1,47 @@
+package edu.hm.cs.kniffel.controller.rules;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import edu.hm.cs.kniffel.model.ReadonlyDiceCup;
+import edu.hm.cs.kniffel.model.full.RollableDiceCup;
+
+public class RuleThreeOfAKind implements Rule {
+
+	private static final int MIN_COUNT = 3;
+
+	@Override
+	public boolean check(ReadonlyDiceCup diceCup) {
+		final Map<Integer, Integer> counts = new HashMap<>();
+		
+		diceCup.getValues().forEach(value -> {
+			if (counts.containsKey(value)) {
+				counts.put(value, counts.get(value) + 1);
+			} else {
+				counts.put(value, 1);
+			}
+		});
+		
+		return counts.values().stream().anyMatch(value -> value >= MIN_COUNT);
+	}
+
+	@Override
+	public int numPoints(ReadonlyDiceCup diceCup) {
+		final int result;
+		
+		if (check(diceCup)) {
+			int sum = 0;
+			
+			for (int diceValue : diceCup.getValues()) {
+				sum += diceValue;
+			}
+			
+			result = sum;
+		} else {
+			result = 0;
+		}
+		
+		return result;
+	}
+
+}

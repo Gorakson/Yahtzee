@@ -1,0 +1,25 @@
+package edu.hm.cs.kniffel.controller.rules;
+
+import edu.hm.cs.kniffel.model.ReadonlyDiceCup;
+import edu.hm.cs.kniffel.model.full.PlayerProtocol;
+import edu.hm.cs.kniffel.model.full.RollableDiceCup;
+
+public class RuleBonus implements Rule {
+
+	private static final int SCORE = 35;
+
+	@Override
+	public boolean check(ReadonlyDiceCup diceCup) {
+		final boolean result;
+		
+		
+		
+		return false;
+	}
+
+	@Override
+	public int numPoints(ReadonlyDiceCup diceCup) {
+		return SCORE;
+	}
+
+}

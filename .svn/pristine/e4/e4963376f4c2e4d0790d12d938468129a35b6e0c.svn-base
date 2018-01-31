@@ -1,0 +1,54 @@
+package edu.hm.cs.kniffel.model.full;
+
+public class Dice implements RollableDice {
+	
+	private static long nextId = 1;
+	public static final int MIN_VALUE = 1;
+	public static final int MAX_VALUE = 6;
+	
+	private final long id;
+	private int value;
+	
+	public Dice() {
+		this.id = nextId++;
+	}
+	
+	/* (non-Javadoc)
+	 * @see edu.hm.cs.kniffel.model.full.RollableDice#getValue()
+	 */
+	@Override
+	public int getValue() {
+		return value;
+	}
+	
+	/* (non-Javadoc)
+	 * @see edu.hm.cs.kniffel.model.full.RollableDice#roll()
+	 */
+	@Override
+	public void roll() {
+        value = (int) (Math.random() * MAX_VALUE + MIN_VALUE);
+        System.out.println(value + " after roll");
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (id ^ (id >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Dice other = (Dice) obj;
+		if (id != other.id)
+			return false;
+		return true;
+	}
+}

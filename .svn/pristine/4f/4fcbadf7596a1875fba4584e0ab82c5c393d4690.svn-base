@@ -1,0 +1,9 @@
+package edu.hm.cs.kniffel.model.full;
+
+import edu.hm.cs.kniffel.model.ReadonlyDiceCup;
+
+public interface RollableDiceCup extends ReadonlyDiceCup {
+
+	void roll(int... diceIndizes);
+	void resetRollsCount();
+}

@@ -1,0 +1,50 @@
+package edu.hm.cs.kniffel.gui;
+
+import java.awt.EventQueue;
+import java.awt.GridLayout;
+
+import javax.swing.JFrame;
+
+import edu.hm.cs.kniffel.GameLoop;
+
+/**
+ * Main class for the user interface.
+ * 
+ * @author Hammerschall
+ * @version 1.0
+ */
+public class MainGUI extends JFrame {
+
+    /** serialVersionUID. */
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * Creates the main frame that expects two additional panels.
+     * 
+     * @param number of players
+     */
+    public MainGUI(int number) {
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 800, 400);
+  
+        getContentPane().setLayout(new GridLayout(2, 0, 0, 0));
+        GameLoop game = new GameLoop();
+        getContentPane().add(new PlayerPanel(number, game));
+        getContentPane().add(new DicePanel(game));
+        
+    }
+
+    /**
+     * Launch the application.
+     * 
+     * @param args number of players
+     */
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                MainGUI frame = new MainGUI(6);
+                frame.setVisible(true);
+            }
+        });
+    }
+}

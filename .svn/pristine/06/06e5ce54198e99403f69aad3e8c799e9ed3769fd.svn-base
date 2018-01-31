@@ -1,0 +1,31 @@
+package edu.hm.cs.kniffel.controller.rules;
+
+import edu.hm.cs.kniffel.model.full.WriteableDiceCup;
+
+public final class Chance extends BaseRule {
+
+	public Chance(WriteableDiceCup diceCup) {
+		super(diceCup);
+	}
+
+	@Override
+	public boolean check() {
+		return true;
+	}
+
+	@Override
+	public int numPoints() {
+		int sum = 0;
+		
+		for (int diceValue : getDiceCup().getValues()) {
+			sum += diceValue;
+		}
+		
+		return sum;
+	}
+
+	@Override
+	public String toString() {
+		return "Chance";
+	}
+}

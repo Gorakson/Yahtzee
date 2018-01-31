@@ -1,0 +1,31 @@
+package edu.hm.cs.kniffel.controller.rules;
+
+import edu.hm.cs.kniffel.model.ReadonlyDiceCup;
+import edu.hm.cs.kniffel.model.RuleSection;
+import edu.hm.cs.kniffel.model.full.PlayerProtocol;
+import edu.hm.cs.kniffel.model.full.ReadwriteDiceCup;
+
+public class RuleBonus extends BaseRule {
+	
+	private static final String NAME = "Bonus";
+	private static final int SCORE = 35;
+	
+	public RuleBonus() {
+		super(NAME);
+	}
+
+	@Override
+	public boolean check(ReadonlyDiceCup diceCup) {
+		return false;
+	}
+
+	@Override
+	public int numPoints(ReadonlyDiceCup diceCup) {
+		return SCORE;
+	}
+
+	@Override
+	public RuleSection getSection() {
+		return RuleSection.Upper;
+	}
+}

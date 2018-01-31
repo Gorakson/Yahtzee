@@ -1,0 +1,65 @@
+package edu.hm.cs.kniffel.model.full;
+
+import java.util.Collection;
+import java.util.List;
+
+import edu.hm.cs.kniffel.model.GameState;
+import edu.hm.cs.kniffel.model.ReadonlyPlayer;
+
+public class Game extends WriteableGame implements Changeable {
+	final WriteableDiceCup diceCup;
+	final List<Player> players;
+	int currentPlayer;
+	GameState gameState;
+	
+	public Game(List<Player> players, Collection<String> ruleNames, int numDice) {
+		if (players == null) {
+			throw new NullPointerException();
+		} else if (players.size() < 1) {
+			throw new IllegalArgumentException();
+		} else if (ruleNames == null) {
+			throw new NullPointerException();
+		} else if (ruleNames.size() == 0) {
+			throw new IllegalArgumentException();
+		} else if (numDice == 0) {
+			throw new IllegalArgumentException();
+		}
+		
+		diceCup = new DiceCup(this, numDice);
+		this.players = players;
+		currentPlayer = (int) (Math.random() * players.size());
+	}
+	
+	@Override
+	public WriteablePlayer getCurrentPlayer() {
+		return players.get(currentPlayer);
+	}
+
+	@Override
+	public GameState getState() {
+		return gameState;
+	}
+	
+	@Override
+	public void nextPlayer() {
+		currentPlayer = (currentPlayer + 1) % players.size();
+		notifyChange();
+	}
+
+	@Override
+	public void setState(GameState gameState) {
+		this.gameState = gameState;
+		notifyChange();
+	}
+	
+	@Override
+	public WriteableDiceCup getDiceCup() {
+		return diceCup;
+	}
+
+	@Override
+	public void notifyChange() {
+		setChanged();
+		notifyObservers();
+	}
+}

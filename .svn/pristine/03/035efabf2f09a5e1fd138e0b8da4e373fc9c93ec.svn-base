@@ -1,0 +1,8 @@
+package edu.hm.cs.kniffel.command;
+
+import edu.hm.cs.kniffel.model.full.WriteableGame;
+
+public interface Command {
+	CommandResult test();
+	CommandResult execute();
+}

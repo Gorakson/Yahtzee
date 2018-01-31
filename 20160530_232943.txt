@@ -1,0 +1,5 @@
+        1s	         1	
+        2s	         2	
+Sum Part 1	         3	
+Sum Part 2	         0	
+     Total	         3	

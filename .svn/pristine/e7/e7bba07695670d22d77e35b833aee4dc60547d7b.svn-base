@@ -1,0 +1,11 @@
+package edu.hm.cs.kniffel.model;
+
+public interface ReadonlyPlayer {
+
+	String getName();
+
+	int getId();
+
+	int getPoints(String ruleName);
+
+}

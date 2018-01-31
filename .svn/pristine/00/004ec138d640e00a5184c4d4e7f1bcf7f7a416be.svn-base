@@ -1,0 +1,21 @@
+package edu.hm.cs.kniffel.controller.rules;
+
+import edu.hm.cs.kniffel.model.RuleSection;
+
+abstract class BaseRule implements Rule {
+	final String name;
+	
+	public BaseRule(String name) {
+		this.name = name;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public RuleSection getSection() {
+		return RuleSection.Lower;
+	}
+}

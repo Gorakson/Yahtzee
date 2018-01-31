@@ -1,0 +1,9 @@
+package edu.hm.cs.kniffel.command.full;
+
+import edu.hm.cs.kniffel.command.CommandResult;
+import edu.hm.cs.kniffel.command.ReadonlyCommand;
+import edu.hm.cs.kniffel.model.Player;
+
+public interface Command extends ReadonlyCommand {
+	CommandResult execute(Player player);
+}

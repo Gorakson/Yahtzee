@@ -1,0 +1,61 @@
+package edu.hm.cs.kniffel.controller.rules;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import edu.hm.cs.kniffel.model.RuleSection;
+import edu.hm.cs.kniffel.model.full.Dice;
+
+public class Rules {
+	private final List<Rule> upperSection;
+	private final List<Rule> lowerSection;
+	public static final int MIN_POINTS_BONUS = 63;
+	
+    
+    /** Anzahl Würfel. */
+    public static final int NUM_DICE = 5;
+	
+	public Rules() {
+		upperSection = new ArrayList<>();
+		lowerSection = new ArrayList<>();
+		
+		for (int counter = Dice.MIN_VALUE; counter <= Dice.MAX_VALUE; counter++) {
+			upperSection.add(new RuleNumber(counter));
+		}
+		
+		upperSection.add(new RuleBonus());
+		
+		lowerSection.add(new RuleThreeOfAKind());
+		lowerSection.add(new RuleFourOfAKind());
+		lowerSection.add(new RuleFullHouse());
+		lowerSection.add(new RuleSmallStraight());
+		lowerSection.add(new RuleLargeStraight());
+		lowerSection.add(new RuleYahtzee());
+		lowerSection.add(new RuleChance());
+	}
+	
+	public List<Rule> getRules(RuleSection section) {
+		if (section == null) {
+			throw new NullPointerException();
+		}
+		
+		final List<Rule> result;
+		
+		if (section == RuleSection.Upper) {
+			result = Collections.unmodifiableList(upperSection);
+		} else {
+			result = Collections.unmodifiableList(lowerSection);
+		}
+		
+		return result;
+	}
+	
+	public List<String> getRuleNames(RuleSection section) {
+		final List<String> result = new ArrayList<>();
+		
+		getRules(section).forEach(rule -> result.add(rule.getName()));
+		
+		return result;
+	}
+}

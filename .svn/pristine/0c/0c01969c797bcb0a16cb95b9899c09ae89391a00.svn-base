@@ -1,0 +1,113 @@
+package edu.hm.cs.kniffel.gui;
+
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
+import edu.hm.cs.kniffel.controller.GameLogic;
+import edu.hm.cs.kniffel.controller.rules.Rule;
+import edu.hm.cs.kniffel.controller.rules.Rules;
+import edu.hm.cs.kniffel.logic.command.Command;
+import edu.hm.cs.kniffel.logic.command.CommandTurnEnd;
+import edu.hm.cs.kniffel.logic.command.CommandWriteScore;
+import edu.hm.cs.kniffel.model.ReadonlyGame;
+import edu.hm.cs.kniffel.model.RuleSection;
+
+public class SwingScoreBoard extends JPanel implements Observer {
+
+	/**
+	 * Serial ID.
+	 */
+	private static final long serialVersionUID = -5476474324722090006L;
+	
+	private final JButton writeButton;
+	private Command writeScore;
+	private final List<Rule> rules;
+	private final GameLogic logic;
+	private final ReadonlyGame game;
+	private final JTable table;
+	private final TableModel model;
+
+	public SwingScoreBoard(ReadonlyGame game, GameLogic logic, Rules rules) {
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		this.logic = logic;
+		this.game = game;
+		game.addObserver(this);
+		this.rules = new LinkedList<>(rules.getRules(RuleSection.Upper));
+		this.rules.addAll(rules.getRules(RuleSection.Lower));
+		
+		model = new ScoreBoardTableModel(game, rules);
+		table = new JTable(model);
+
+		writeButton = new JButton("Write");
+
+
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.getSelectionModel().addListSelectionListener(e -> onRowSelectionChange(e));
+
+		add(new JScrollPane(table), BorderLayout.NORTH);
+		
+		writeButton.addActionListener(al -> onWriteButtonClick(al));
+		writeButton.setEnabled(false);
+		writeButton.setAlignmentY(Component.BOTTOM_ALIGNMENT);
+		writeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		add(writeButton, BorderLayout.CENTER);
+	}
+	
+	private void onRowSelectionChange(ListSelectionEvent e) {
+		if (!e.getValueIsAdjusting()) {
+            System.out.println(table.getSelectedRow());
+            
+            Object columnValue = table.getValueAt(table.getSelectedRow(), 0);
+            
+            Optional<Rule> optRule = rules.stream().filter(rule -> rule.getName().equals(columnValue)).findAny();
+            
+            if (optRule.isPresent()) {            	
+            	writeScore = new CommandWriteScore(optRule.get());
+            	writeButton.setEnabled(logic.testCommand(writeScore, game.getCurrentPlayer()).getResult());
+            } else {
+            	writeButton.setEnabled(false);
+            }
+       }
+	}
+	
+	private void onWriteButtonClick(ActionEvent al) {
+		logic.executeCommand(writeScore, game.getCurrentPlayer());
+		logic.executeCommand(new CommandTurnEnd(), game.getCurrentPlayer());
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		if (writeScore == null) {
+			writeButton.setEnabled(false);
+		} else {
+			writeButton.setEnabled(logic.testCommand(writeScore, game.getCurrentPlayer()).getResult());		
+		}
+	}
+}

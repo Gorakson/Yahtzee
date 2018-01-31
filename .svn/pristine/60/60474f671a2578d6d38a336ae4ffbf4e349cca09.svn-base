@@ -1,0 +1,11 @@
+package edu.hm.cs.kniffel.model;
+
+import java.util.List;
+
+public interface ReadonlyDiceCup {
+
+	List<Integer> getValues();
+
+	int getRollsCount();
+
+}

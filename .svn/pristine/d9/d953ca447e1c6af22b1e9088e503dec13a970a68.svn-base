@@ -1,0 +1,43 @@
+package edu.hm.cs.kniffel.command.full;
+
+import edu.hm.cs.kniffel.command.CommandResult;
+import edu.hm.cs.kniffel.model.GameState;
+import edu.hm.cs.kniffel.model.Player;
+import edu.hm.cs.kniffel.model.full.WriteableGame;
+
+public class CommandTurnEnd extends BaseCommand {
+
+	public CommandTurnEnd(Player player, WriteableGame game) {
+		super(player, game);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public CommandResult execute() {
+		final CommandResult result = test();
+		
+		if (result.getResult()) {
+			getGame().getDiceCup().resetRollsCount();
+			getGame().nextPlayer();
+			getGame().setState(GameState.Running);
+		} else {
+			throw new IllegalStateException(result.getDescription());
+		}
+		
+		return result;
+	}
+
+	@Override
+	public CommandResult test() {
+		final CommandResult result;
+		
+		if (getGame().getState() != GameState.TurnEnd) {
+			result = new CommandResult(false, "Turn has not ended yet.");
+		} else {
+			result = new CommandResult();
+		}
+		
+		return result;
+	}
+
+}

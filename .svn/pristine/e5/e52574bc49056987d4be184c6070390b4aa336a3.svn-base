@@ -1,0 +1,32 @@
+package edu.hm.cs.kniffel;
+
+import java.util.Set;
+
+import edu.hm.cs.kniffel.gui.Dice;
+
+/**
+ * controls the complete game flow
+ * @author Hammerschall
+ * @version 1.0
+ */
+public class GameLoop {
+
+    /**
+     * inits all data that are importand 
+     * for the game flow.
+     */
+    public GameLoop() {
+        // init game (whatever you will need)
+    }
+
+    /**
+     * roll all dice in cup.
+     * @param cup with dice
+     */
+    public void roll(Set<Dice> cup) {
+        for (Dice next: cup) {
+            next.roll();
+        }
+    }
+
+}

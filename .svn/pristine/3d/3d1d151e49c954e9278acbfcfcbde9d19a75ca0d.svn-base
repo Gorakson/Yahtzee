@@ -1,0 +1,9 @@
+package edu.hm.cs.kniffel.command;
+
+import edu.hm.cs.kniffel.model.Player;
+
+public interface ReadonlyCommand {
+
+	CommandResult test(Player player);
+
+}

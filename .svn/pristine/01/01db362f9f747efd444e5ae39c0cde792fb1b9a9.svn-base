@@ -1,0 +1,67 @@
+package edu.hm.cs.kniffel.logic.command;
+
+import edu.hm.cs.kniffel.controller.rules.Rule;
+import edu.hm.cs.kniffel.controller.rules.RuleBonus;
+import edu.hm.cs.kniffel.controller.rules.Rules;
+import edu.hm.cs.kniffel.model.GameState;
+import edu.hm.cs.kniffel.model.Player;
+import edu.hm.cs.kniffel.model.RuleSection;
+import edu.hm.cs.kniffel.model.full.WriteableGame;
+
+public class CommandWriteScore implements Command {
+
+	final Rule rule;
+
+	public CommandWriteScore(Rule rule) {
+		if (rule == null) {
+			throw new NullPointerException();
+		}
+		
+		this.rule = rule;
+	}
+	
+	@Override
+	public CommandResult test(WriteableGame game, Player player) {
+		final CommandResult result;
+		
+		if (game.getState() != GameState.Running) {
+			result = new CommandResult(false, "Game is not running.");
+		} else if (!game.getCurrentPlayer().equals(player)) {
+			result = new CommandResult(false, "Player with ID: " + player.getId() + " is not the current player.");
+		} else if (game.getDiceCup().getRollsCount() < 1) {
+			result = new CommandResult(false, "Player with ID: " + player.getId() + " must roll first.");
+		} else if (game.getCurrentPlayer().getProtocol().isScored(rule.getName())) {
+			result = new CommandResult(false, "Already scored.");
+		} else if (player.getProtocol().isScored(rule.getName())) {
+			result = new CommandResult(false, "The box " + rule.toString() + " is already filled in.");
+		} else {
+			result = new CommandResult();
+		}
+			
+		return result;
+	}
+
+	@Override
+	public CommandResult execute(WriteableGame game, Player player) {
+		final CommandResult result = test(game, player);
+		
+		if (result.getResult()) {
+			player.getProtocol().setPoints(rule.getName(), rule.numPoints(game.getDiceCup()));
+			
+			// Check for Bonus
+			if (rule.getSection() == RuleSection.Upper) {
+				if (player.getProtocol().sum() >= Rules.MIN_POINTS_BONUS) {
+					Rule bonus = new RuleBonus();
+					player.getProtocol().setPoints(bonus.getName(), bonus.numPoints(game.getDiceCup()));
+				}
+			}
+			
+			game.setState(GameState.TurnEnd);
+		} else {
+			throw new IllegalStateException(result.getDescription());
+		}
+		
+		return result;
+	}
+
+}

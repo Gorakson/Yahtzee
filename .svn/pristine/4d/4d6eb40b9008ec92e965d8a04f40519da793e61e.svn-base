@@ -1,0 +1,70 @@
+package edu.hm.cs.kniffel.gui;
+
+import java.awt.BorderLayout;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+
+import edu.hm.cs.kniffel.controller.GameLogic;
+import edu.hm.cs.kniffel.controller.rules.Rules;
+import edu.hm.cs.kniffel.model.ReadonlyGame;
+
+public class SwingScoreBoard extends JPanel {
+
+	/**
+	 * Serial ID.
+	 */
+	private static final long serialVersionUID = -5476474324722090006L;
+
+	public SwingScoreBoard(ReadonlyGame game, GameLogic logic, Rules rules) {
+        setLayout(new BorderLayout());
+		DefaultTableModel model = new DefaultTableModel();
+		final List<String> colNames = new ArrayList<>();
+		colNames.add("Rule");
+		
+		game.getPlayers().forEach(player -> colNames.add(player.getName()));
+
+		String[] columnNames = new String[colNames.size()];
+		columnNames = colNames.toArray(columnNames);
+		
+		Object[][] test = new Object[rules.getRules().size()][colNames.size()];
+		
+		for (int row = 0; row < test.length; row++) {
+			for (int col = 0; col < test[row].length; col++) {
+				final String cellValue;
+				final String ruleName = rules.getRuleNames().get(row);
+				
+				if (col == 0) {
+					cellValue = ruleName;
+				} else {
+					cellValue = Integer.toString(game.getPlayers().get(col - 1).getProtocol().getPoints(ruleName));
+				}
+				
+				test[row][col] = cellValue;
+			}
+		}
+		
+		JTable table = new JTable(test, columnNames);
+		
+
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent arg0) {
+		        if (!arg0.getValueIsAdjusting()) {
+		             System.out.println(table.getSelectedRow());
+		        }
+			}
+		});
+		add(new JScrollPane(table));
+	}
+}

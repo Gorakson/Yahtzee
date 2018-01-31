@@ -1,0 +1,24 @@
+package edu.hm.cs.kniffel.gui;
+
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
+import edu.hm.cs.kniffel.model.Player;
+
+public class TableRow {
+	private final String rowName;
+	private final Function<Player, String> rowFunction;
+	
+	public TableRow(String rowName, Function<Player, String> rowFunction) {
+		this.rowName = rowName;
+		this.rowFunction = rowFunction;
+	}
+	
+	public String getRowName() {
+		return rowName;
+	}
+	
+	public String getValue(Player player) {
+		return rowFunction.apply(player);
+	}
+}

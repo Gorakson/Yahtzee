@@ -1,0 +1,11 @@
+package edu.hm.cs.kniffel.model.full;
+
+import edu.hm.cs.kniffel.model.ReadonlyDice;
+import edu.hm.cs.kniffel.model.ReadonlyDiceCup;
+
+public interface ReadwriteDiceCup extends ReadonlyDiceCup {
+
+	void roll();
+	void reset();
+	void active(ReadonlyDice dice, boolean isActive);
+}

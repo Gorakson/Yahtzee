@@ -1,0 +1,75 @@
+/**
+ * Hochschule München, Fakultät 07. 
+ * Softwareentwicklung II Praktikum, IF2A, SS2016
+ * Lösung der 2. Aufgabe
+ * Oracle Java SE 8u77
+ * OS Win7 64, RAM 8GB, CPU 4x2.5GHz x64
+ */
+
+package edu.hm.cs.kniffel.gui;
+
+import java.awt.GridLayout;
+import java.util.Observable;
+import java.util.Observer;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+import edu.hm.cs.kniffel.controller.GameLogic;
+import edu.hm.cs.kniffel.controller.rules.Ruleset;
+import edu.hm.cs.kniffel.model.ReadonlyGame;
+
+/**
+ * Main class for the user interface.
+ * 
+ * @author Hammerschall
+ * @author Thomas Pfaffinger, thomas.pfaffinger@hm.edu
+ * @version 1.0
+ */
+public class MainGUI extends JFrame implements Observer {
+
+    /** serialVersionUID. */
+    private static final long serialVersionUID = 1L;
+    /** The width of the main window. */
+    private static final int WIDTH = 800;
+    /** The height of the main window. */
+    private  static final int HEIGHT = 480;
+    /** The game this GUI displays. */
+    private final ReadonlyGame game;
+
+
+    /**
+     * Creates the main frame that expects two additional panels.
+     * 
+     * @param logic the game logic
+     * @param game the game this GUI displays
+     * @param rules Ruleset for a game
+     */
+    public MainGUI(GameLogic logic, ReadonlyGame game, Ruleset rules) {
+        this.game = game;
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, WIDTH, HEIGHT);
+    
+        final int gridrows = 3;
+        final int spaceBetweenRows = 16;
+        
+        getContentPane().setLayout(new GridLayout(gridrows, 0, 0, spaceBetweenRows));
+        getContentPane().add(new SwingPlayerPanel(logic, game));
+        getContentPane().add(new SwingScoreBoard(game, logic, rules));
+        getContentPane().add(new SwingDicePanel(logic, game));
+
+        game.addObserver(this);
+    }
+    
+	@Override
+	public void update(Observable arg0, Object arg1) {		
+		if (game.getWinner().isPresent()) {
+		    System.out.println(game.getWinner().get());
+		    final String dialogMessage = "Congratulations " + game.getWinner().get().getName() + ". You won!!!\n"
+		            + "Would you like to save the scoreboard?";
+		    JOptionPane.showMessageDialog(this, dialogMessage);
+		}
+		
+	    repaint();
+	}
+}

@@ -1,0 +1,95 @@
+package edu.hm.cs.kniffel.model.full;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import edu.hm.cs.kniffel.model.ReadonlyDice;
+import edu.hm.cs.kniffel.utilities.Changeable;
+
+public class DiceCup implements ReadwriteDiceCup {
+	
+	private final Changeable owner;
+	private final List<RollableDice> dices;
+	private final Set<ReadonlyDice> inactiveDices;
+	private int rollsCount;
+	
+	public DiceCup(Changeable owner, int size) {
+		if (owner == null) {
+			throw new NullPointerException();
+		} else if (size < 1) {
+			throw new IllegalArgumentException();
+		}
+		
+		this.owner = owner;
+		rollsCount = 0;
+		dices = new ArrayList<>();
+		
+		for (int index = 0; index < size; index++) {
+			dices.add(new Dice());
+		}
+		
+		inactiveDices = new HashSet<>();
+	}
+
+	@Override
+	public void roll() {		
+		dices.forEach(dice -> {
+			if (!inactiveDices.contains(dice)) {
+				dice.roll();
+			}
+		});
+		
+		rollsCount++;
+		owner.notifyChange();
+	}
+
+	@Override
+	public List<Integer> getValues() {
+		return Collections.unmodifiableList(dices.stream().map(dice -> dice.getValue()).collect(Collectors.toList()));
+	}
+	
+	@Override
+	public int getRollsCount() {
+		return rollsCount;
+	}
+
+	@Override
+	public void reset() {
+		rollsCount = 0;		
+		inactiveDices.clear();
+		
+		dices.stream().forEach(dice -> dice.reset() );
+	}
+
+	@Override
+	public List<ReadonlyDice> getDices() {
+		return Collections.unmodifiableList(dices);
+	}
+	
+	@Override
+	public boolean isInactive(ReadonlyDice dice) {
+		return inactiveDices.contains(dice);
+	}
+	
+	@Override
+	public void active(ReadonlyDice dice, boolean isActive) {
+		if (isActive && inactiveDices.contains(dice)) {
+			inactiveDices.remove(dice);
+		} else if ((!(isActive || inactiveDices.contains(dice)))) {
+			inactiveDices.add(dice);
+		} else {
+			throw new IllegalArgumentException();
+		}
+		
+		owner.notifyChange();
+	}
+	
+	@Override
+	public boolean anyActive() {
+		return !inactiveDices.containsAll(dices);
+	}
+}

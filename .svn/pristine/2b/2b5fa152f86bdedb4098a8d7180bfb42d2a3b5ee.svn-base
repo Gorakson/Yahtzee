@@ -1,0 +1,30 @@
+package edu.hm.cs.kniffel.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import edu.hm.cs.kniffel.command.CommandResult;
+import edu.hm.cs.kniffel.command.full.Command;
+import edu.hm.cs.kniffel.model.Player;
+import edu.hm.cs.kniffel.model.full.WriteableGame;
+
+public class GameLogic {
+	private final WriteableGame game;
+	
+	public GameLogic(WriteableGame game) {
+		if (game == null) {
+			throw new NullPointerException();
+		} 
+		
+		this.game = game;
+	}
+	
+	public CommandResult testCommand(Command command, Player player) {
+		return command.test(game, player);
+	}
+	
+	public CommandResult executeCommand(Command command, Player player) {
+		return command.execute(game, player);
+	}
+}

@@ -1,0 +1,6 @@
+package edu.hm.cs.kniffel.controller.rules;
+
+public interface Rule {
+	boolean check();
+	int numPoints();
+}

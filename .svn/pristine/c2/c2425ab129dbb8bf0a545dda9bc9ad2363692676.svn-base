@@ -1,0 +1,8 @@
+package edu.hm.cs.kniffel.model;
+
+public enum GameState {
+	Initializing,
+	Running,
+	TurnEnd,
+	GameOver
+}

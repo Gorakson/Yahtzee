@@ -1,0 +1,9 @@
+package edu.hm.cs.kniffel.model.full;
+
+import edu.hm.cs.kniffel.model.ReadonlyPlayer;
+
+public interface WriteablePlayer extends ReadonlyPlayer {
+
+	void setPoints(String ruleName, int points);
+
+}

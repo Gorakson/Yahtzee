@@ -1,0 +1,5 @@
+package edu.hm.cs.kniffel.utilities;
+
+public interface Changeable {
+	void notifyChange();
+}

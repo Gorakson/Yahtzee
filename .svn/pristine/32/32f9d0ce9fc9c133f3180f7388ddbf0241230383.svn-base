@@ -1,0 +1,39 @@
+package edu.hm.cs.kniffel.controller.rules;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import edu.hm.cs.kniffel.model.full.Dice;
+
+public class Rules {
+	private final List<Rule> rules;
+	
+	public Rules() {
+		rules = new ArrayList<>();
+		
+		for (int counter = Dice.MIN_VALUE; counter <= Dice.MAX_VALUE; counter++) {
+			rules.add(new RuleNumber(counter));
+		}
+		
+		rules.add(new RuleThreeOfAKind());
+		rules.add(new RuleFourOfAKind());
+		rules.add(new RuleFullHouse());
+		rules.add(new RuleSmallStraight());
+		rules.add(new RuleLargeStraight());
+		rules.add(new RuleYahtzee());
+		rules.add(new RuleChance());
+	}
+	
+	public List<Rule> getRules() {
+		return Collections.unmodifiableList(rules);
+	}
+	
+	public List<String> getRuleNames() {
+		final List<String> result = new ArrayList<>();
+		
+		rules.forEach(rule -> result.add(rule.toString()));
+		
+		return result;
+	}
+}

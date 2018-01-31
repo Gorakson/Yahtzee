@@ -1,0 +1,39 @@
+package edu.hm.cs.kniffel.controller.rules;
+
+import edu.hm.cs.kniffel.model.ReadonlyDiceCup;
+import edu.hm.cs.kniffel.model.RuleSection;
+import edu.hm.cs.kniffel.model.full.ReadwriteDiceCup;
+
+public final class RuleNumber extends BaseRule {
+
+	private final int number;
+	
+	public RuleNumber(int number) {
+		super(number + "s");
+		this.number = number;
+	}
+	
+	
+	@Override
+	public boolean check(ReadonlyDiceCup diceCup) {
+		return diceCup.getValues().stream().filter(num -> num == number).count() >= 1;
+	}
+
+	@Override
+	public int numPoints(ReadonlyDiceCup diceCup) {
+		final int result;
+		
+		if (check(diceCup)) {
+			result = (int) (diceCup.getValues().stream().filter(num -> num == number).count() * number);
+		} else {
+			result = 0;
+		}
+		
+		return result;
+	}
+	
+	@Override
+	public RuleSection getSection() {
+		return RuleSection.Upper;
+	}
+}

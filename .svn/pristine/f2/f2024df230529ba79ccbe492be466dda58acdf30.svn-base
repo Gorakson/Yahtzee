@@ -1,0 +1,80 @@
+package edu.hm.cs.kniffel.gui;
+
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+import java.awt.GridLayout;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+
+import javax.swing.JFrame;
+
+import edu.hm.cs.kniffel.controller.GameLogic;
+import edu.hm.cs.kniffel.controller.rules.Rules;
+import edu.hm.cs.kniffel.model.GameState;
+import edu.hm.cs.kniffel.model.ReadonlyGame;
+import edu.hm.cs.kniffel.model.full.Game;
+import edu.hm.cs.kniffel.model.full.WriteableGame;
+import edu.hm.cs.kniffel.utilities.Updateable;
+
+/**
+ * Main class for the user interface.
+ * 
+ * @author Hammerschall
+ * @version 1.0
+ */
+public class MainGUI extends JFrame implements Observer {
+
+    /** serialVersionUID. */
+    private static final long serialVersionUID = 1L;
+    
+    /** Anzahl Würfel. */
+    private static final int NUM_DICE = 5;
+    
+    private final List<Updateable> updateables;
+
+    /**
+     * Creates the main frame that expects two additional panels.
+     * 
+     * @param number of players
+     */
+    public MainGUI(GameLogic logic, ReadonlyGame game, Rules rules) {
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 800, 400);
+        getContentPane().setLayout(new GridLayout(3, 0, 0, 0));
+        getContentPane().add(new SwingPlayerPanel(logic, game), BorderLayout.CENTER);
+        getContentPane().add(new SwingDicePanel(logic, game), BorderLayout.CENTER);
+
+        updateables = new ArrayList<>();
+        game.addObserver(this);
+    }
+    
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		repaint();
+		
+		updateables.forEach(updateable -> updateable.update() );
+	}
+
+    /**
+     * Launch the application.
+     * 
+     * @param args number of players
+     */
+    public static void main(String[] args) {
+    	final int numPlayers = 6;
+    	
+    	
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+            	Rules rules = new Rules();
+            	WriteableGame game = new Game(numPlayers, NUM_DICE, rules.getRuleNames());
+            	GameLogic logic = new GameLogic(game);
+                MainGUI frame = new MainGUI(logic, game, rules);
+                game.setState(GameState.Running);
+                frame.setVisible(true);
+            }
+        });
+    }
+}

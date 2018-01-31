@@ -1,0 +1,54 @@
+package edu.hm.cs.kniffel.gui;
+
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.JPanel;
+
+import edu.hm.cs.kniffel.GameLoop;
+
+/**
+ * panel to manage players in the game.
+ * 
+ * @author Hammerschall
+ * @version 1.0
+ */
+public class PlayerPanel extends JPanel {
+
+    /** 
+     * serial number. 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * Initiates a new panel with players. Each player is set on an 
+     * additional panel.
+     * @param number of players in the game
+     * @param game object to control the game flow
+     */
+    public PlayerPanel(int number, GameLoop game) {
+        
+        setLayout(new GridLayout(0, number, 0, 0));
+        
+        // create players and player panels
+        for (int i = 0; i < number; i++) {
+            JPanel panel = new JPanel();
+            panel.setLayout(new BorderLayout());
+            Player player = new Player(i + 1, panel);
+
+            // mouse listener to react on button clicks.
+            player.addMouseListener(new MouseAdapter() {
+                public void mousePressed(MouseEvent me) {
+                    player.activate();
+                }
+            });
+
+            panel.add(player, BorderLayout.CENTER);
+            add(panel);
+        }
+
+    }
+
+}

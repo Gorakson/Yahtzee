@@ -1,0 +1,47 @@
+package edu.hm.cs.kniffel.model.full;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class PlayerProtocol {
+	private final Changeable owner;
+	private final Map<String, Integer> protocol;
+	
+	public PlayerProtocol(Changeable owner, String... ruleNames) {
+		if (ruleNames == null) {
+			throw new NullPointerException();
+		} else if (ruleNames.length == 0) {
+			throw new IllegalArgumentException();
+		} else if (owner == null) {
+			throw new NullPointerException();
+		}
+		
+		this.owner = owner;
+		protocol = new HashMap<>();
+		
+		for (int index = 0; index < ruleNames.length; index++) {
+			protocol.put(ruleNames[index], 0);
+		}
+	}
+	
+	public int getPoints(String ruleName) {
+		
+		if (!protocol.containsKey(ruleName)) {
+			throw new IllegalArgumentException();
+		} 
+		
+		return protocol.get(ruleName);
+	}
+	
+	public void setPoints(String ruleName, int points) {
+		
+		if (!protocol.containsKey(ruleName)) {
+			throw new IllegalArgumentException();
+		} else if (points < 0) {
+			throw new IllegalArgumentException();
+		}
+		
+		protocol.put(ruleName, points);
+		owner.notifyChange();
+	}
+}

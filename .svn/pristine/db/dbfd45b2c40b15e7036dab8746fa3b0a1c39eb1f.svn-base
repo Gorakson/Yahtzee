@@ -1,0 +1,5 @@
+package edu.hm.cs.kniffel.model.full;
+
+public interface Changeable {
+	void notifyChange();
+}

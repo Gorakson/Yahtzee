@@ -1,0 +1,50 @@
+package edu.hm.cs.kniffel.command.full;
+
+import edu.hm.cs.kniffel.command.CommandResult;
+import edu.hm.cs.kniffel.controller.rules.Rule;
+import edu.hm.cs.kniffel.model.GameState;
+import edu.hm.cs.kniffel.model.Player;
+import edu.hm.cs.kniffel.model.full.WriteableGame;
+
+public class CommandWriteScore extends BaseCommand {
+
+	final Rule rule;
+	
+	public CommandWriteScore(WriteableGame game, Rule rule) {
+		super(game);
+		this.rule = rule;
+	}
+
+	@Override
+	public CommandResult test(Player player) {
+		final CommandResult result;
+		
+		if (getGame().getState() != GameState.Running) {
+			result = new CommandResult(false, "Game is not running.");
+		} else if (!getGame().getCurrentPlayer().equals(player)) {
+			result = new CommandResult(false, "Player with ID: " + player.getId() + " is not the current player.");
+		} else if (!rule.check(getGame().getDiceCup())) {
+			result = new CommandResult(false, "The condition for " + rule.toString() + " is not met.");
+		} else if (player.getProtocol().isScored(rule.toString())) {
+			result = new CommandResult(false, "The box " + rule.toString() + " is already filled in.");
+		} else {
+			result = new CommandResult();
+		}
+			
+		return result;
+	}
+
+	@Override
+	public CommandResult execute(Player player) {
+		final CommandResult result = test(player);
+		
+		if (result.getResult()) {
+			player.getProtocol().setPoints(rule.toString(), rule.numPoints(getGame().getDiceCup()));
+		} else {
+			throw new IllegalStateException(result.getDescription());
+		}
+		
+		return result;
+	}
+
+}

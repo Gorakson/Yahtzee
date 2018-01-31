@@ -1,0 +1,49 @@
+package edu.hm.cs.kniffel.controller.rules;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import edu.hm.cs.kniffel.model.ReadonlyDiceCup;
+import edu.hm.cs.kniffel.model.full.ReadwriteDiceCup;
+
+public class RuleFullHouse extends BaseRule {
+
+	private static final String NAME = "Full House";
+	private static final int NUM_POINTS = 25;
+	
+	public RuleFullHouse() {
+		super(NAME);
+	}
+
+	private static final int NUM_DIFFERENT_VALUES = 2;
+	private static final int SIZE_PAIR = 2;
+
+	@Override
+	public boolean check(ReadonlyDiceCup diceCup) {
+		final Map<Integer, Integer> counts = new HashMap<>();
+		
+		diceCup.getValues().forEach(value -> {
+			if (counts.containsKey(value)) {
+				counts.put(value, counts.get(value) + 1);
+			} else {
+				counts.put(value, 1);
+			}
+		});
+
+		return counts.size() == NUM_DIFFERENT_VALUES && counts.values().contains(SIZE_PAIR);
+	}
+
+	@Override
+	public int numPoints(ReadonlyDiceCup diceCup) {
+		final int result;
+		
+		if (check(diceCup)) {
+			result = NUM_POINTS;
+		} else {
+			result = 0;
+		}
+		
+		return result;
+	}
+
+}

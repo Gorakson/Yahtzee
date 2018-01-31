@@ -1,0 +1,89 @@
+package edu.hm.cs.kniffel.gui;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import edu.hm.cs.kniffel.model.Player;
+import edu.hm.cs.kniffel.model.ReadonlyGame;
+
+/**
+ * Represents player in the game. Player objects contain player data (model) and
+ * wrap a JLabel as its visual representation (view).
+ * @author U. Hammerschall
+ * @version 1.0
+ */
+public class SwingPlayer extends JLabel {
+
+    /**
+     * serial number.
+     */
+    private static final long serialVersionUID = 1L;
+    
+    /**
+     * defines default image size for each player.
+     */
+    private static final int IMAGE_SIZE = 80;
+    
+    /**
+     * panel to allow background color changes.
+     */
+    private final JPanel panel;
+    
+    /**
+     * defines if the player is currently active (was clicked).
+     */
+    private boolean isActive = false;
+    
+    private static final Color ACTIVE_COLOR = Color.green;
+    private final Player player;
+    private final ReadonlyGame game;
+
+    /**
+     * Initiates a new player object with identifying number and panel.
+     * @param number of the player
+     * @param panel of the player
+     */
+    public SwingPlayer(ReadonlyGame game, Player player, JPanel panel) {
+        this.panel = panel;
+        this.player = player;
+        this.game = game;
+    }
+
+    /**
+     * Realizes color changes of the player panel based on the status.
+     */
+    public void activate() {
+        if (!isActive) {
+            panel.setBackground(Color.PINK);
+            isActive = true;
+        } 
+        else {
+            panel.setBackground(null);
+            isActive = false;
+        }
+    }
+
+    @Override
+    public void paint(Graphics g) {
+
+        BufferedImage image = null;
+        try {
+            image = ImageIO.read(SwingDice.class.getResource("./img/p" + player.getId() + ".png"));
+            int resized = (int) (image.getWidth() * ((double) IMAGE_SIZE / image.getHeight()));
+
+            g.drawImage(image, (this.getWidth() - resized) / 2, (this.getHeight() - IMAGE_SIZE) / 2, resized,
+                    IMAGE_SIZE, null, null);
+            
+            panel.setBackground(player.equals(game.getCurrentPlayer()) ? ACTIVE_COLOR : null);
+        } 
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+}

@@ -1,0 +1,71 @@
+package edu.hm.cs.kniffel.model.full;
+
+import java.util.List;
+import java.util.LinkedList;
+
+import edu.hm.cs.kniffel.utilities.Changeable;
+
+public class PlayerProtocol {
+	private static final String SUM_ENTRY_NAME = "Sum";
+	
+	private final Changeable owner;
+	
+	private final List<Protocol> protocols;
+	private final Protocol sumEntry;
+	
+	public PlayerProtocol(Changeable owner, List<Protocol> entries) {
+		if (entries == null) {
+			throw new NullPointerException();
+		} else if (entries.size() == 0) {
+			throw new IllegalArgumentException();
+		} else if (owner == null) {
+			throw new NullPointerException();
+		}
+		
+		this.owner = owner;
+		
+		sumEntry = new ProtocolEntry();
+		protocols = new LinkedList<>();
+		entries.addAll(entries);
+	}
+	
+	public int getPoints(String ruleName) {
+		
+		if (!protocols.containsKey(ruleName)) {
+			throw new IllegalArgumentException();
+		} 
+		
+		return protocols.get(ruleName).getScore();
+	}
+	
+	public void setPoints(String ruleName, int points) {
+		
+		if (!protocols.containsKey(ruleName)) {
+			throw new IllegalArgumentException();
+		} else if (points < 0) {
+			throw new IllegalArgumentException();
+		}
+		
+		protocols.get(ruleName).setScore(points);
+		owner.notifyChange();
+	}
+	
+	public boolean isScored(String ruleName) {
+		
+		if (!protocols.containsKey(ruleName)) {
+			throw new IllegalArgumentException();
+		} 
+		
+		return protocols.get(ruleName).isScored(ruleName);
+	}
+
+	public int sum() {
+		int sum = 0;
+		
+		for (ProtocolEntry entry : protocols.values()) {
+			sum += entry.getScore();
+		}
+		
+		return sum;
+	}
+}

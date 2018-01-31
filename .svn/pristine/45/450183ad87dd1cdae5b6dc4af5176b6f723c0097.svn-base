@@ -1,0 +1,29 @@
+package edu.hm.cs.kniffel.controller.rules;
+
+import edu.hm.cs.kniffel.model.ReadonlyDiceCup;
+import edu.hm.cs.kniffel.model.full.ReadwriteDiceCup;
+
+public final class RuleChance extends BaseRule {
+	
+	private static final String NAME = "Chance";
+	
+	public RuleChance() {
+		super(NAME);
+	}
+
+	@Override
+	public boolean check(ReadonlyDiceCup diceCup) {
+		return true;
+	}
+
+	@Override
+	public int numPoints(ReadonlyDiceCup diceCup) {
+		int sum = 0;
+		
+		for (int diceValue : diceCup.getValues()) {
+			sum += diceValue;
+		}
+		
+		return sum;
+	}
+}

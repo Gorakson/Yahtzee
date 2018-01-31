@@ -1,0 +1,67 @@
+package edu.hm.cs.kniffel.gui;
+
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.JLabel;
+
+/**
+ * Represents dice in the game. Dice objects contain dice data (model) and
+ * wrap a JLabel as its visual representation (view).
+ * @author U. Hammerschall
+ *
+ */
+public class Dice extends JLabel {
+
+    /**
+     * Serial number.
+     */
+    private static final long serialVersionUID = 1L;
+    
+    /**
+     * Current value of the dice.
+     */
+    private int value = 0;
+
+    /**
+     * Default constructor.
+     */
+    public Dice() {
+    }
+
+    /**
+     * Custom constructor. Necessary for base class. 
+     * @param name of the (base class) label
+     */
+    public Dice(String name) {
+        super(name);
+    }
+
+    /**
+     * Rolls this dice. A random number between 1 and 6 is calculated.
+     * This number becomes the new value of the dice.
+     */
+    public void roll() {
+        value = (int) ((Math.random() * 6) + 1);
+        repaint();
+    }
+    
+    @Override
+    public void paint(Graphics g) {
+        BufferedImage image = null;
+        try {
+            image = ImageIO.read(Dice.class.getResource("./img/" + value + ".png"));
+            int width = image.getWidth() + image.getWidth() / 3;
+            int height = image.getHeight() + image.getHeight() / 3;
+            g.drawImage(image, (this.getWidth() - width) / 2, 
+                    (this.getHeight() - width) / 2, width,
+                    height, null, null);
+        } 
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+}

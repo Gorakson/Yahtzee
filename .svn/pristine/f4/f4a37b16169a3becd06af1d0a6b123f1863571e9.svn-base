@@ -1,0 +1,28 @@
+package edu.hm.cs.kniffel.controller.rules;
+
+import edu.hm.cs.kniffel.model.full.PlayerProtocol;
+import edu.hm.cs.kniffel.model.full.WriteableDiceCup;
+
+public class RuleBonus extends BaseRule {
+
+	private static final int SCORE = 35;
+	
+	public RuleBonus(WriteableDiceCup diceCup, PlayerProtocol playerProtocol) {
+		super(diceCup);
+	}
+
+	@Override
+	public boolean check() {
+		final boolean result;
+		
+		
+		
+		return false;
+	}
+
+	@Override
+	public int numPoints() {
+		return SCORE;
+	}
+
+}

@@ -1,0 +1,32 @@
+package edu.hm.cs.kniffel.gui.animation;
+
+import java.awt.Color;
+
+public class FadeColor implements Animation {
+
+	private final Color start;
+	private final Color end;
+	
+	public FadeColor(Color start, Color end) {
+		this.start = start;
+		this.end = end;
+	}
+	
+	@Override
+	public void start() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void draw() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setOnFinish(Runnable runnable) {
+		// TODO Auto-generated method stub
+		
+	}
+}

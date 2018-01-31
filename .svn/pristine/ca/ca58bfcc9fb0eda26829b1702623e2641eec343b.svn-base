@@ -1,0 +1,19 @@
+package edu.hm.cs.kniffel.model.full;
+
+public class ProtocolEntry {
+	private int score; 
+	private boolean scored;
+	
+	public int getScore(String ruleName) {
+		return score;
+	}
+	
+	public void setScore(String ruleName, int score) {
+		this.score = score;
+		scored = true;
+	}
+	
+	public boolean isScored(String ruleName) {
+		return scored;
+	}
+}

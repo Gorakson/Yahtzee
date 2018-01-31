@@ -1,0 +1,60 @@
+package edu.hm.cs.kniffel.logic.command;
+
+import edu.hm.cs.kniffel.model.GameState;
+import edu.hm.cs.kniffel.model.Player;
+import edu.hm.cs.kniffel.model.RuleSection;
+import edu.hm.cs.kniffel.model.full.WriteableGame;
+
+public class CommandTurnEnd implements Command {
+
+    @Override
+    public CommandResult test(WriteableGame game, Player player) {
+        final CommandResult result;
+
+        if (game.getState() != GameState.TurnEnd) {
+            result = new CommandResult(false, "Turn has not ended yet.");
+        } else {
+            result = new CommandResult();
+        }
+
+        return result;
+    }
+
+    @Override
+    public CommandResult execute(WriteableGame game, Player player) {
+        final CommandResult result = test(game, player);
+
+        if (result.getResult()) {
+            boolean isGameOver = true;
+
+            isGameOver &= game.getPlayers().stream().map(thePlayer -> thePlayer.getProtocol())
+                                                    .allMatch(protocol -> protocol.allScored());
+            System.out.println(isGameOver);
+            if (isGameOver) {
+                Player winner = null;
+                int winnerScore = Integer.MIN_VALUE;
+                
+                for (Player thePlayer : game.getPlayers()) {
+                    final int playerScore = thePlayer.getProtocol().sum();
+                    if (playerScore > winnerScore) {
+                        winner = thePlayer;
+                        winnerScore = playerScore;
+                    }
+                }
+                System.out.println(winner.getName());
+                game.setWinner(winner);
+                game.setState(GameState.GameOver);
+                
+            }
+            else {
+                game.getDiceCup().reset();
+                game.nextPlayer();
+                game.setState(GameState.Running);
+            }
+        } else {
+            throw new IllegalStateException(result.getDescription());
+        }
+
+        return result;
+    }
+}

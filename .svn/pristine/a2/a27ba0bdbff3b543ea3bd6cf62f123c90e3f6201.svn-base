@@ -1,0 +1,57 @@
+package edu.hm.cs.kniffel.controller.rules;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import edu.hm.cs.kniffel.model.RuleSection;
+import edu.hm.cs.kniffel.model.full.Dice;
+
+public class Rules {
+	private final List<Rule> rules;
+	public static final int MIN_NUM_PLAYERS = 1;
+	public static final int MAX_NUM_PLAYERS = 6;
+	public static final int MIN_POINTS_BONUS = 63;
+	
+    
+    /** Anzahl Würfel. */
+    public static final int NUM_DICE = 5;
+	
+	public Rules() {
+		rules = new ArrayList<>();
+		
+		rules.add(new RuleNumber(1));
+		
+//		for (int counter = Dice.MIN_VALUE; counter <= Dice.MAX_VALUE; counter++) {
+//			rules.add(new RuleNumber(counter));
+//		}
+//		
+//		rules.add(new RuleBonus());
+//		
+//		rules.add(new RuleThreeOfAKind());
+//		rules.add(new RuleFourOfAKind());
+//		rules.add(new RuleFullHouse());
+//		rules.add(new RuleSmallStraight());
+//		rules.add(new RuleLargeStraight());
+//		rules.add(new RuleYahtzee());
+//		rules.add(new RuleChance());
+	}
+	
+	public List<Rule> getRules() {
+	    return Collections.unmodifiableList(rules);
+	}
+	
+	public List<Rule> getRules(RuleSection section) {
+	    return Collections.unmodifiableList(rules.stream().filter(rule -> rule.getSection() == section)
+	                                                      .collect(Collectors.toList()));
+	}
+	
+	public List<String> getRuleNames() {
+	    return getRules().stream().map(rule -> rule.getName() ).collect(Collectors.toList());
+	}
+	
+	public List<String> getRuleNames(RuleSection section) {
+	    return getRules(section).stream().map(rule -> rule.getName() ).collect(Collectors.toList());
+	}
+}

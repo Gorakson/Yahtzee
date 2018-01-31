@@ -1,0 +1,8 @@
+edu.hm.cs.kniffel
+edu.hm.cs.kniffel.controller
+edu.hm.cs.kniffel.controller.rules
+edu.hm.cs.kniffel.gui
+edu.hm.cs.kniffel.logic.command
+edu.hm.cs.kniffel.model
+edu.hm.cs.kniffel.model.full
+edu.hm.cs.kniffel.utilities

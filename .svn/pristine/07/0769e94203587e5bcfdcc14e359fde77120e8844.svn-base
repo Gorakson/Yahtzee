@@ -1,0 +1,11 @@
+package edu.hm.cs.kniffel.controller;
+
+import edu.hm.cs.kniffel.model.full.WriteableGame;
+
+public class GameLogic {
+	private final WriteableGame game;
+	
+	public GameLogic(WriteableGame game) {
+		this.game = game;
+	}
+}

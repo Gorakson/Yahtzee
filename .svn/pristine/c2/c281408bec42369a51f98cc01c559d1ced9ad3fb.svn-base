@@ -1,0 +1,58 @@
+package edu.hm.cs.kniffel.gui;
+
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import edu.hm.cs.kniffel.controller.GameLogic;
+import edu.hm.cs.kniffel.model.ReadonlyDice;
+import edu.hm.cs.kniffel.model.ReadonlyGame;
+
+/**
+ * Panel to manage all dice in the game.
+ * @author Hammerschall
+ * @version 1.0
+ */
+public class SwingDicePanel extends JPanel {
+
+    /**
+     * serial number.
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * Creates a new panel with five dice.
+     * @param game object to control the game flow
+     */
+    public SwingDicePanel(GameLogic logic, ReadonlyGame game) {
+        
+        setLayout(new BorderLayout());
+        
+        // panel with dice
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(0, game.getDiceCup().getDices().size(), 0, 0));
+        for (ReadonlyDice dice : game.getDiceCup().getDices()) {
+            panel.add(new SwingDice(dice));
+        }       
+        add(panel, BorderLayout.CENTER);  
+        
+        // panel with roll button
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout());
+        JButton roll = new JButton("Würfeln");
+        roll.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                game.getDiceCup().roll(1, 2, 3, 4, 5);
+            }
+        });
+        buttonPanel.add(roll);
+        add(buttonPanel, BorderLayout.SOUTH);
+
+    }
+}

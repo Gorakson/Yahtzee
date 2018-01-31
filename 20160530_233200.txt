@@ -1,0 +1,5 @@
+      Rule	  Player 1	  Player 2	        1s	         1	         1	
+        2s	         2	         4	
+Sum Part 1	         3	         5	
+Sum Part 2	         0	         0	
+     Total	         3	         5	

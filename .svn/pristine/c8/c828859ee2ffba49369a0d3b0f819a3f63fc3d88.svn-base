@@ -1,0 +1,92 @@
+package edu.hm.cs.kniffel.gui;
+
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
+
+import edu.hm.cs.kniffel.controller.GameLogic;
+import edu.hm.cs.kniffel.logic.command.Command;
+import edu.hm.cs.kniffel.logic.command.CommandRollDiceCup;
+import edu.hm.cs.kniffel.model.ReadonlyDice;
+import edu.hm.cs.kniffel.model.ReadonlyGame;
+import edu.hm.cs.kniffel.utilities.Updateable;
+
+/**
+ * Panel to manage all dice in the game.
+ * @author Hammerschall
+ * @version 1.0
+ */
+public class SwingDicePanel extends JPanel implements Updateable {
+
+    /**
+     * serial number.
+     */
+    private static final long serialVersionUID = 1L;
+    
+    /** Button */
+    private final JButton rollButton;
+    
+    private Command rollCommand;
+    
+    private GameLogic logic;
+    private ReadonlyGame game;
+
+    /**
+     * Creates a new panel with five dice.
+     * @param game object to control the game flow
+     */
+    public SwingDicePanel(GameLogic logic, ReadonlyGame game) {
+        
+        setLayout(new BorderLayout());
+        this.logic = logic;
+        this.game = game;
+
+        Collection<ReadonlyDice> dices = game.getDiceCup().getDices();
+        setLayout(new GridLayout(0, dices.size(), 0, 0));
+        
+        for (ReadonlyDice dice : dices) {
+        	JPanel panel = new JPanel();
+        	panel.setLayout(new BorderLayout());
+        	final SwingDice swingDice = new SwingDice(logic, game, dice, panel);
+            
+            // mouse listener to react on button clicks.
+            swingDice.addMouseListener(new MouseAdapter() {
+                public void mousePressed(MouseEvent me) {
+                    swingDice.activate();
+                }
+            });
+            
+            panel.add(swingDice);
+            add(panel);
+        }       
+
+        rollCommand = new CommandRollDiceCup();
+        
+        // panel with roll button
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout());
+        rollButton = new JButton("Würfeln");
+        rollButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                logic.executeCommand(rollCommand, game.getCurrentPlayer());
+            }
+        });
+        buttonPanel.add(rollButton);
+        add(buttonPanel, BorderLayout.SOUTH);
+    }
+
+	@Override
+	public void update() {
+		rollButton.setEnabled(logic.testCommand(rollCommand, game.getCurrentPlayer()).getResult());
+	}
+}

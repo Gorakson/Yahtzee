@@ -1,0 +1,27 @@
+package edu.hm.cs.kniffel.gui;
+
+import javax.swing.JButton;
+
+import edu.hm.cs.kniffel.logic.command.Command;
+
+public class CommandButton extends JButton {
+
+	/**
+	 * Serial ID.
+	 */
+	private static final long serialVersionUID = 2505817504416852192L;
+
+	private Command command;
+
+	public CommandButton() {
+		
+	}
+	
+	public Command getCommand() {
+		return command;
+	}
+
+	public void setCommand(Command command) {
+		this.command = command;
+	}
+}

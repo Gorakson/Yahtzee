@@ -1,0 +1,12 @@
+package edu.hm.cs.kniffel.model.full;
+
+import edu.hm.cs.kniffel.model.GameState;
+import edu.hm.cs.kniffel.model.Player;
+import edu.hm.cs.kniffel.model.ReadonlyGame;
+
+public abstract class WriteableGame extends ReadonlyGame {
+
+	public abstract void nextPlayer();
+	public abstract void setState(GameState gameState);
+	public abstract void setWinner(Player player);
+}

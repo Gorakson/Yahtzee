@@ -1,0 +1,8 @@
+package edu.hm.cs.kniffel.command.full;
+
+import edu.hm.cs.kniffel.command.CommandResult;
+import edu.hm.cs.kniffel.command.ReadonlyCommand;
+
+public interface Command extends ReadonlyCommand {
+	CommandResult execute();
+}
